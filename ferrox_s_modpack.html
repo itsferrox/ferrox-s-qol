@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ferrox's modpack</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --mc-font-pixel: 'Press Start 2P', cursive, monospace;
+            --mc-font-tall: 'VT323', monospace;
+            
+            --mc-text: #E0E0E0;
+            --mc-text-shadow: #3F3F3F;
+            --mc-text-hover: #FFFF55;
+            --mc-text-hover-shadow: #3F3F00;
+            
+            --btn-bg: #747474;
+            --btn-bg-hover: #6882E8;
+            --btn-border-light: #A8A8A8;
+            --btn-border-dark: #3B3B3B;
+            --btn-border-black: #000000;
+            
+            --panel-bg: rgba(0, 0, 0, 0.78);
+            --panel-border: #404040;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: var(--mc-font-pixel);
+            color: var(--mc-text);
+            background-color: #1a1a1a;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Beta Minecraft Dirt Background Canvas */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -2;
+            image-rendering: pixelated;
+        }
+
+        /* Dark Vignette Overlay */
+        .vignette {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.85) 100%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Authentic Minecraft Button */
+        .mc-button {
+            display: block;
+            width: 100%;
+            max-width: 400px;
+            height: 44px;
+            margin: 8px auto;
+            background: #747474;
+            border: 2px solid #000000;
+            box-shadow: 
+                inset 2px 2px 0px #A8A8A8, 
+                inset -2px -2px 0px #3B3B3B;
+            position: relative;
+            cursor: pointer;
+            text-align: center;
+            line-height: 40px;
+            font-family: var(--mc-font-pixel);
+            font-size: 14px;
+            color: #E0E0E0;
+            text-shadow: 2px 2px 0px #3F3F3F;
+            text-decoration: none;
+            letter-spacing: 0.5px;
+            transition: none;
+        }
+
+        .mc-button:hover {
+            background-color: #6882E8;
+            box-shadow: 
+                inset 2px 2px 0px #9EAFFF, 
+                inset -2px -2px 0px #2E3B7D;
+            color: #FFFF55;
+            text-shadow: 2px 2px 0px #3F3F00;
+        }
+
+        .mc-button:active {
+            box-shadow: 
+                inset -2px -2px 0px #A8A8A8, 
+                inset 2px 2px 0px #3B3B3B;
+        }
+
+        .mc-button.half {
+            width: 49%;
+            display: inline-block;
+            margin: 0;
+        }
+        
+        .buttons-row {
+            display: flex;
+            justify-content: space-between;
+            max-width: 400px;
+            margin: 8px auto;
+        }
+
+        .view {
+            display: none;
+            width: 100%;
+            min-height: 100vh;
+            flex-direction: column;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .view.active {
+            display: flex;
+        }
+
+        #main-menu {
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .logo-wrapper {
+            position: relative;
+            margin-bottom: 35px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 580px;
+            text-align: center;
+        }
+
+        /* Glowing Yellow Splash Text Positioned at Bottom Right of Title */
+        .splash-text {
+            position: absolute;
+            bottom: 5px;
+            right: 40px;
+            transform: rotate(-15deg);
+            animation: mcPulse 0.5s infinite alternate ease-in-out;
+            font-family: var(--mc-font-pixel);
+            font-size: 18px;
+            color: #FFFF55;
+            text-shadow: 3px 3px 0px #3F3F00, -1px -1px 0px #000, 1px -1px 0px #000, -1px 1px 0px #000, 1px 1px 0px #000;
+            white-space: nowrap;
+            z-index: 10;
+            cursor: pointer;
+        }
+
+        .mc-search-input {
+            width: 100%;
+            max-width: 400px;
+            margin: 12px auto 0 auto;
+            display: block;
+            padding: 8px 12px;
+            background-color: #000000;
+            border: 2px solid #555555;
+            color: #FFFFFF;
+            font-family: var(--mc-font-pixel);
+            font-size: 12px;
+            outline: none;
+            box-shadow: inset 2px 2px 0 #222;
+        }
+
+        .mc-search-input:focus {
+            border-color: #FFFF55;
+        }
+
+        @keyframes mcPulse {
+            0% { transform: rotate(-15deg) scale(1); }
+            100% { transform: rotate(-15deg) scale(1.08); }
+        }
+
+        .menu-buttons-container {
+            width: 100%;
+            max-width: 420px;
+            padding: 0 10px;
+        }
+
+        .list-page {
+            background-color: var(--panel-bg);
+            border: 4px solid #282828;
+            box-shadow: inset 0 0 10px #000000;
+            margin: 30px auto;
+            width: 92%;
+            max-width: 1050px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 25px;
+            max-height: 85vh;
+        }
+
+        .list-header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 3px dashed #555;
+            padding-bottom: 12px;
+        }
+
+        .list-title {
+            font-family: var(--mc-font-pixel);
+            font-size: 22px;
+            color: #FFFFFF;
+            text-shadow: 3px 3px 0 #222;
+        }
+
+        .list-content {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding-right: 12px;
+        }
+        
+        .list-content::-webkit-scrollbar {
+            width: 14px;
+        }
+        .list-content::-webkit-scrollbar-track {
+            background: #000000; 
+            border: 2px solid #333333;
+        }
+        .list-content::-webkit-scrollbar-thumb {
+            background: #666666; 
+            border: 2px solid #AAAAAA;
+        }
+
+        .category-title {
+            font-family: var(--mc-font-pixel);
+            font-size: 14px;
+            color: #55FF55;
+            text-shadow: 2px 2px 0 #003300;
+            margin: 24px 0 12px 0;
+            background: rgba(0, 50, 0, 0.4);
+            padding: 8px 12px;
+            border-left: 4px solid #55FF55;
+        }
+
+        .list-item {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.03);
+            margin-bottom: 6px;
+            padding: 10px 14px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .list-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #AAAAAA;
+        }
+
+        .item-number {
+            font-family: var(--mc-font-tall);
+            font-size: 24px;
+            color: #888888;
+            width: 50px;
+            text-align: right;
+            margin-right: 18px;
+            flex-shrink: 0;
+        }
+
+        .item-details {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            width: 100%;
+        }
+
+        .item-name {
+            font-family: var(--mc-font-pixel);
+            font-size: 12px;
+            color: #FFFF55;
+            text-shadow: 1px 1px 0 #3F3F00;
+            width: 280px;
+            flex-shrink: 0;
+            line-height: 1.4;
+        }
+
+        .item-desc {
+            font-family: var(--mc-font-tall);
+            font-size: 22px;
+            color: #DDDDDD;
+            flex-grow: 1;
+            line-height: 1.2;
+        }
+
+        @media (max-width: 768px) {
+            .item-details {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .item-name {
+                width: 100%;
+                margin-bottom: 4px;
+            }
+            .splash-text { 
+                font-size: 14px; 
+                right: 20px; 
+                bottom: 0px; 
+            }
+            .list-page {
+                width: 96%;
+                padding: 15px;
+                max-height: 90vh;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="bg-canvas"></canvas>
+    <div class="vignette"></div>
+
+    <!-- MAIN MENU -->
+    <div id="main-menu" class="view active">
+        <div class="logo-wrapper">
+            <!-- Centered 3D Minecraft Style Title SVG -->
+            <svg class="title-svg" viewBox="0 0 600 120" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="stoneGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="#BFBFBF"/>
+                        <stop offset="50%" stop-color="#8B8B8B"/>
+                        <stop offset="100%" stop-color="#5E5E5E"/>
+                    </linearGradient>
+                    <pattern id="pixelCrack" width="8" height="8" patternUnits="userSpaceOnUse">
+                        <rect width="8" height="8" fill="none"/>
+                        <path d="M 0 2 L 4 2 L 4 6 L 8 6" stroke="#404040" stroke-width="1" fill="none"/>
+                    </pattern>
+                </defs>
+                
+                <!-- Centered Extrusion Shadows -->
+                <text x="306" y="86" text-anchor="middle" font-family="'Press Start 2P', monospace" font-size="54" font-weight="bold" fill="#000000" letter-spacing="-2">ferrox's</text>
+                <text x="304" y="84" text-anchor="middle" font-family="'Press Start 2P', monospace" font-size="54" font-weight="bold" fill="#2B2B2B" letter-spacing="-2">ferrox's</text>
+                <text x="302" y="82" text-anchor="middle" font-family="'Press Start 2P', monospace" font-size="54" font-weight="bold" fill="#3D3D3D" letter-spacing="-2">ferrox's</text>
+                <text x="300" y="80" text-anchor="middle" font-family="'Press Start 2P', monospace" font-size="54" font-weight="bold" fill="#4F4F4F" letter-spacing="-2">ferrox's</text>
+
+                <!-- Front Stone Text -->
+                <text x="296" y="76" text-anchor="middle" font-family="'Press Start 2P', monospace" font-size="54" font-weight="bold" fill="url(#stoneGrad)" letter-spacing="-2">ferrox's</text>
+                <text x="296" y="76" text-anchor="middle" font-family="'Press Start 2P', monospace" font-size="54" font-weight="bold" fill="url(#pixelCrack)" opacity="0.6" letter-spacing="-2">ferrox's</text>
+                <text x="296" y="76" text-anchor="middle" font-family="'Press Start 2P', monospace" font-size="54" font-weight="bold" fill="none" stroke="#FFFFFF" stroke-width="1.5" opacity="0.8" letter-spacing="-2">ferrox's</text>
+            </svg>
+
+            <div class="splash-text" id="splash-text" onclick="cycleSplash()">QOL</div>
+        </div>
+
+        <div class="menu-buttons-container">
+            <button class="mc-button" onclick="navigate('mods-page')">Mods</button>
+            <button class="mc-button" onclick="navigate('resourcepacks-page')">Resourcepacks</button>
+            <div class="buttons-row">
+                <button class="mc-button half" onclick="navigate('shaders-page')">Shaders</button>
+                <button class="mc-button half" onclick="navigate('datapacks-page')">Datapacks</button>
+            </div>
+            <button class="mc-button" onclick="downloadMrPack()">Download Modpack</button>
+        </div>
+    </div>
+
+    <!-- MODS PAGE -->
+    <div id="mods-page" class="view">
+        <div class="list-page">
+            <div class="list-header">
+                <h2 class="list-title">Mods List</h2>
+                <input type="text" id="mods-search" class="mc-search-input" placeholder="Search mods..." oninput="filterList('mods')">
+            </div>
+            <div class="list-content" id="mods-content"></div>
+            <button class="mc-button" onclick="navigate('main-menu')" style="margin-top: 15px;">Done</button>
+        </div>
+    </div>
+
+    <!-- RESOURCEPACKS PAGE -->
+    <div id="resourcepacks-page" class="view">
+        <div class="list-page">
+            <div class="list-header">
+                <h2 class="list-title">Resource Packs</h2>
+                <input type="text" id="resourcepacks-search" class="mc-search-input" placeholder="Search resourcepacks..." oninput="filterList('resourcepacks')">
+            </div>
+            <div class="list-content" id="resourcepacks-content"></div>
+            <button class="mc-button" onclick="navigate('main-menu')" style="margin-top: 15px;">Done</button>
+        </div>
+    </div>
+
+    <!-- SHADERS PAGE -->
+    <div id="shaders-page" class="view">
+        <div class="list-page">
+            <div class="list-header">
+                <h2 class="list-title">Shader Packs</h2>
+            </div>
+            <div class="list-content" id="shaders-content"></div>
+            <button class="mc-button" onclick="navigate('main-menu')" style="margin-top: 15px;">Done</button>
+        </div>
+    </div>
+
+    <!-- DATAPACKS PAGE -->
+    <div id="datapacks-page" class="view">
+        <div class="list-page">
+            <div class="list-header">
+                <h2 class="list-title">Data Packs</h2>
+            </div>
+            <div class="list-content" id="datapacks-content"></div>
+            <button class="mc-button" onclick="navigate('main-menu')" style="margin-top: 15px;">Done</button>
+        </div>
+    </div>
+
+    <script>
+        const splashes = [
+            "QOL",
+            "Suffering from success!",
+            "Is this even vanilla?",
+            "Too lazy to chop trees!",
+            "Needs more automation!",
+            "QOL Overload!"
+        ];
+        let splashIndex = 0;
+
+        function cycleSplash() {
+            splashIndex = (splashIndex + 1) % splashes.length;
+            document.getElementById('splash-text').innerText = splashes[splashIndex];
+        }
+
+        function initMinecraftBackground() {
+            const canvas = document.getElementById('bg-canvas');
+            const ctx = canvas.getContext('2d');
+            
+            function resize() {
+                canvas.width = Math.max(1, Math.ceil(window.innerWidth / 4));
+                canvas.height = Math.max(1, Math.ceil(window.innerHeight / 4));
+                drawDirt();
+            }
+
+            function drawDirt() {
+                const w = canvas.width;
+                const h = canvas.height;
+                if (w <= 0 || h <= 0) return;
+                
+                const imgData = ctx.createImageData(w, h);
+                const data = imgData.data;
+
+                for (let i = 0; i < data.length; i += 4) {
+                    const rand = Math.random();
+                    let r = 134, g = 96, b = 67; // #866043
+
+                    if (rand < 0.2) {
+                        r -= 15; g -= 12; b -= 10;
+                    } else if (rand < 0.4) {
+                        r -= 25; g -= 20; b -= 18;
+                    } else if (rand > 0.85) {
+                        r += 15; g += 12; b += 10;
+                    }
+
+                    data[i] = r;
+                    data[i+1] = g;
+                    data[i+2] = b;
+                    data[i+3] = 255;
+                }
+                ctx.putImageData(imgData, 0, 0);
+            }
+
+            window.addEventListener('resize', resize);
+            resize();
+        }
+
+        function navigate(viewId) {
+            document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+        }
+
+        function downloadMrPack() {
+            const link = document.createElement('a');
+            link.href = 'ferrox\'s qol 2.0.0.mrpack';
+            link.download = 'ferrox\'s qol 2.0.0.mrpack';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        const categorizedMods = {
+            "Performance & Optimization": [
+                { name: "Sodium", desc: "Modern rendering engine offering massive framerate increases." },
+                { name: "Sodium Extra", desc: "Additional customization and detailed settings for Sodium." },
+                { name: "Lithium", desc: "General-purpose server and physics optimization mod." },
+                { name: "FerriteCore", desc: "Reduces RAM and memory usage significantly." },
+                { name: "Krypton", desc: "Optimizes the Minecraft network stack for lower latency." },
+                { name: "ImmediatelyFast", desc: "Speeds up immediate mode rendering for entity fonts and HUDs." },
+                { name: "Nvidium", desc: "Drastically increases rendering performance on NVIDIA GPUs." },
+                { name: "ModernFix", desc: "All-in-one performance and bugfix mod reducing launch times." },
+                { name: "MoreCulling", desc: "Changes how multiple types of block culling are handled." },
+                { name: "CullLeaves", desc: "Adds culling to leaf blocks for high FPS boosts." },
+                { name: "Dynamic FPS", desc: "Reduces resource usage while Minecraft is tabbed out." },
+                { name: "Entity Culling", desc: "Uses async path-tracing to skip rendering hidden entities." },
+                { name: "C2ME", desc: "Concurrent Chunk Management Engine for faster world generation." },
+                { name: "Noisium", desc: "Optimizes terrain noise calculations during chunk generation." },
+                { name: "ScalableLux", desc: "Optimizes chunk lighting engine calculations." },
+                { name: "Fast Item Frames", desc: "Optimizes item frame rendering performance." },
+                { name: "Chunky", desc: "Pre-generates world chunks to eliminate exploration lag." }
+            ],
+            "Visuals & Graphics": [
+                { name: "Iris", desc: "Modern shaders mod compatible with OptiFine shaderpacks." },
+                { name: "Zoomify", desc: "A sleek, smooth, and highly customizable zoom mod." },
+                { name: "Visuality", desc: "Adds visual particles when hitting entities or breaking blocks." },
+                { name: "3D Skin Layers", desc: "Renders player skin outer layers with 3D volume." },
+                { name: "Ambient Environment", desc: "Smooths out transitions between biome noise colors." },
+                { name: "LambDynamicLights", desc: "Adds dynamic hand-held and dropped light sources." },
+                { name: "Leaves Be Gone", desc: "Fast leaf decay animation after chopping trees." },
+                { name: "Detail Armor Bar", desc: "Provides detailed armor type icons in the armor bar." },
+                { name: "Continuity", desc: "Fabric mod enabling connected glass and block textures." },
+                { name: "Entity Texture Features", desc: "Emulates OptiFine custom entity features and skins." },
+                { name: "Entity Model Features", desc: "Emulates OptiFine custom entity models." },
+                { name: "Cool Rain", desc: "Improves rain visual rendering and splash drops." },
+                { name: "Explosive Enhancement", desc: "Overhauls explosion particles and visual shockwaves." },
+                { name: "Not Enough Animations", desc: "Adds third-person eating, drinking, and holding animations." },
+                { name: "3D Armor", desc: "Renders equipped armor items with 3D depth." },
+                { name: "Status Effect Bars", desc: "Displays status effect timers directly on HUD." },
+                { name: "Dark Loading Screen", desc: "Dark background mode during world loading." },
+                { name: "Wakes", desc: "Adds realistic water wakes behind boats and swimming entities." },
+                { name: "Camera Overhaul", desc: "Adds realistic camera tilts when turning and walking." },
+                { name: "Simple Fog", desc: "Adjusts and customizes environmental fog rendering." },
+                { name: "Swinging Lanterns", desc: "Adds realistic swaying animations to lanterns." },
+                { name: "Item Physic Lite", desc: "Adds physical 3D drop items on the ground." },
+                { name: "Panda Colors", desc: "Custom colors and themes for interfaces and mobs." },
+                { name: "Armor HUD", desc: "Displays armor status and durability on screen." },
+                { name: "Eclipse UI", desc: "Sleek dark user interface reskin." },
+                { name: "TPC", desc: "Third-person camera alignment and tweaks." },
+                { name: "AEOG", desc: "Atmospheric environmental graphics enhancements." }
+            ],
+            "Quality of Life & UI": [
+                { name: "AppleSkin", desc: "Shows food saturation and hunger restoration info." },
+                { name: "Mod Menu", desc: "Adds a clean screen to view installed mods." },
+                { name: "MiniHUD", desc: "Customizable overlay to show coordinates, FPS, and light levels." },
+                { name: "Mouse Tweaks", desc: "Enhances inventory drag and scroll actions." },
+                { name: "Right Click Harvest", desc: "Harvest and replant crops with a single right click." },
+                { name: "Chest Tracker", desc: "Remembers and highlights items stored across your chests." },
+                { name: "Clumps", desc: "Groups nearby experience orbs together into single clusters." },
+                { name: "Controlling", desc: "Adds a search bar to keybinding configuration menus." },
+                { name: "Searchables", desc: "Library adding search bars to item inventories." },
+                { name: "Better F3", desc: "Replaces standard F3 debug menu with clean colored blocks." },
+                { name: "Easy Shulker Boxes", desc: "Open and view shulker boxes directly inside inventories." },
+                { name: "Shulker Box Labels", desc: "Renders clean custom text labels on shulker boxes." },
+                { name: "Durability Tooltip", desc: "Shows remaining durability numbers on tools." },
+                { name: "Better Mount HUD", desc: "Displays player health and mount stats simultaneously." },
+                { name: "Ping Wheel", desc: "In-game ping marker system to point out locations." },
+                { name: "Resourcify", desc: "Browse and download resource packs directly inside game menus." },
+                { name: "Better Command Block UI", desc: "Expanded text area and syntax highlighting for commands." },
+                { name: "Advancement Plaques", desc: "Displays pop-up advancement banners at top of screen." },
+                { name: "Gamma Utils", desc: "Fullbright toggle key for lighting dark caves." },
+                { name: "Tool Switcher", desc: "Automatically selects correct tool when breaking blocks." },
+                { name: "Elytra Slot", desc: "Adds dedicated equipment slot for Elytra wings." },
+                { name: "Chat Heads", desc: "Displays player skin heads next to chat messages." },
+                { name: "Screenshot Viewer", desc: "Built-in gallery to view taken screenshots in-game." },
+                { name: "Pickup Notifier", desc: "Compact log of recently picked up items." },
+                { name: "Item Stats", desc: "Detailed equipment stats displayed in tooltips." },
+                { name: "Convenient Effects", desc: "Better display and management of active potion effects." },
+                { name: "Multi Key Bindings", desc: "Assign multiple keybinds to single actions." },
+                { name: "Just Key Binds", desc: "Streamlined keybinding configuration interface." },
+                { name: "No Resource Pack Warnings", desc: "Hides resource pack version mismatch warnings." },
+                { name: "No Chat Reports", desc: "Disables chat reporting telemetry signatures." },
+                { name: "Client Sort", desc: "Fast client-side inventory and container sorting." },
+                { name: "Paginated Advancements", desc: "Organizes achievements into multiple pages." },
+                { name: "Better Advancements", desc: "Full-screen view for tracking achievements." },
+                { name: "Better Stats", desc: "Redesigns player statistics screen with charts." },
+                { name: "Cherished Worlds", desc: "Pin and bookmark favorite singleplayer worlds." },
+                { name: "Note Block Tuner", desc: "Visual interface helper for tuning note blocks." },
+                { name: "Playtime Command", desc: "In-game command to track total player play time." },
+                { name: "Played", desc: "Tracks playtime across singleplayer and multiplayer." },
+                { name: "Fuel Info", desc: "Displays remaining fuel burn time in furnaces." },
+                { name: "Bookshelf Inspector", desc: "Inspect bookshelf contents without opening GUI." },
+                { name: "Instant Trash", desc: "Quick slot or keybind for discarding unwanted items." },
+                { name: "Better Selection", desc: "Enhances text selection in chat and input fields." },
+                { name: "Autoclicker", desc: "Configurable built-in auto clicker keybind." },
+                { name: "Scribble", desc: "In-game notepad and drawing utility." },
+                { name: "CWB", desc: "Custom world border visual and functional controls." },
+                { name: "Enhanced Groups", desc: "Better entity grouping and social behavior UI." }
+            ],
+            "Gameplay & Mechanics": [
+                { name: "Universal Enchants", desc: "Allows applying enchantments across expanded weapon types." },
+                { name: "Leash Villager", desc: "Allows attaching leads to villagers for transport." },
+                { name: "Seamless Trading", desc: "Fast-tracks villager trading without GUI delays." },
+                { name: "Infinite Trading", desc: "Prevents villager trades from locking up." },
+                { name: "Trade Cycling", desc: "Cycle villager trades with a single click." },
+                { name: "Villager Trading Plus", desc: "Enhanced villager trade management and UI." },
+                { name: "Universal Bone Meal", desc: "Allows bone meal to grow flowers, cacti, and sugarcane." },
+                { name: "Jump Over Fences", desc: "Allows players to jump over fence blocks." },
+                { name: "Weaponmaster YDM", desc: "Displays holstered weapons on player back and waist." },
+                { name: "Image2map", desc: "Converts images into in-game map items." },
+                { name: "Sleepwarp", desc: "Accelerates time smooth-fast forward during sleep." },
+                { name: "Slab Back", desc: "Craft 2 slabs back into 1 full block." },
+                { name: "Head in the Clouds", desc: "Adjusts cloud rendering heights." },
+                { name: "Players Drop Heads", desc: "Players drop their head skull upon death." },
+                { name: "Mob Heads", desc: "Mobs have a chance to drop their head on death." },
+                { name: "Diagonal Walls", desc: "Allows cobblestone walls to connect diagonally." },
+                { name: "Diagonal Windows", desc: "Allows glass panes to connect diagonally." },
+                { name: "Diagonal Fences", desc: "Allows wooden fences to connect diagonally." },
+                { name: "Klee Slabs", desc: "Break half slabs individually." },
+                { name: "Connectible Chains", desc: "Connect chains horizontally across posts." },
+                { name: "Signed Paintings", desc: "Displays artist signature on placed paintings." },
+                { name: "Too Many Paintings", desc: "Expands available painting art choices." },
+                { name: "Freecam", desc: "Detaches camera to explore surrounding terrain." },
+                { name: "Tightfire", desc: "Lowers fire height rendering on player screen." },
+                { name: "Packed Packs", desc: "Enables combining multiple resource packs." },
+                { name: "Crops Love Rain", desc: "Rain accelerates plant and crop growth." },
+                { name: "Jukebox Looping", desc: "Loops jukebox music tracks automatically." },
+                { name: "Jukebox Custom Disc Fix", desc: "Fixes audio streaming bugs with custom music discs." },
+                { name: "BBE", desc: "Basic block extensions for building." },
+                { name: "Hopper the Hedgehog", desc: "Speeds up item movement through hoppers." },
+                { name: "Hopper Gadgetry", desc: "Enhanced hopper routing and filtering functions." },
+                { name: "Nemo's Mending", desc: "Overhauls Mending enchantment mechanics." },
+                { name: "Better Than Mending", desc: "Reworks Mending to be balanced and convenient." },
+                { name: "Stormie Spiders", desc: "Improves spider AI behavior and climbing." },
+                { name: "Vehicle Upgrade", desc: "Upgrades minecarts and vehicles with new capabilities." },
+                { name: "Smooth Minecarts", desc: "Smooth physics and rotation for minecarts." },
+                { name: "Minecart Trains Fork", desc: "Connect multiple minecarts into train lines." },
+                { name: "No Creeper Explosion", desc: "Suppresses creeper explosion terrain damage." },
+                { name: "Banner Bedsheets", desc: "Apply banner designs onto bed covers." },
+                { name: "Simple Voice Chat", desc: "Proximity voice chat in multiplayer worlds." },
+                { name: "Underlay", desc: "Clean visual background under HUD elements." },
+                { name: "Underground Beacons", desc: "Allows beacons to function deep underground." },
+                { name: "Shogi", desc: "Fully functional Japanese chess board game in-game." },
+                { name: "Accurate Block Placement Reborn", desc: "Precise block placement angles and control." },
+                { name: "Not Fully Broken", desc: "Saves tools at 1 durability instead of shattering." },
+                { name: "Follower's Teleport Too", desc: "Pets and followers teleport alongside you." },
+                { name: "Tripwire Duper", desc: "Enables tripwire mechanics for redstone farms." },
+                { name: "Cut Through", desc: "Attack mobs through tall grass and foliage." },
+                { name: "Clickthrough Plus", desc: "Open containers through attached signs or frames." },
+                { name: "Fox Friend Remastered", desc: "Enhanced fox taming and behaviors." },
+                { name: "Anvil Restoration", desc: "Allows repairing damaged anvils with iron." },
+                { name: "TNT Timer", desc: "Displays visual countdown overlay on lit TNT." },
+                { name: "Herd Mentality", desc: "Passive animals form herds and follow group movement." },
+                { name: "Graves", desc: "Spawns a grave with your inventory upon death." },
+                { name: "The Block Keeps Ticking", desc: "Keeps designated tile entities active across chunks." },
+                { name: "Grim Kingdoms Lost Structures Ruins", desc: "Generates ancient castle ruins and dungeons." },
+                { name: "Forged Lead", desc: "Craft durable leads that don't break easily." },
+                { name: "Axolotl Buckets", desc: "Displays axolotl color details on bucket items." }
+            ],
+            "World Generation & Environment": [
+                { name: "Terralith", desc: "Overhauls overworld terrain generation with 80+ custom biomes." },
+                { name: "Tectonic", desc: "Generates massive mountain ranges and deep canyons." },
+                { name: "Towns and Towers", desc: "Adds medieval towns, villages, and pillager outposts." },
+                { name: "Structory", desc: "Adds subtle ruins, towers, and atmospheric structures." },
+                { name: "Serene Seasons", desc: "Adds changing seasons with dynamic weather." },
+                { name: "Sound Physics Remastered", desc: "Realistic sound echo, reverb, and wall occlusion." },
+                { name: "Ambient Sounds", desc: "Adds rich biome environmental soundscapes." },
+                { name: "Presence Footsteps", desc: "Adds detailed footstep acoustic feedback." },
+                { name: "Audioplayer", desc: "Play custom voice audio and music on disc items." },
+                { name: "Streams Reflowing", desc: "Dynamic water currents in natural rivers." },
+                { name: "Classic Farlands", desc: "Brings back classic Beta Far Lands terrain generation." },
+                { name: "Terrablender", desc: "Biome blending layer for custom worldgen." },
+                { name: "Atmospherics", desc: "Realistic sky and weather particle effects." },
+                { name: "Immersive Storms", desc: "Heavy weather, rain, and thunder effects." }
+            ],
+            "Maps & Navigation": [
+                { name: "Xaero's World Map", desc: "Full-screen interactive world map interface." },
+                { name: "Xaero's Minimap", desc: "On-screen mini-map with entity radar and waypoints." },
+                { name: "Xaero's World Map Share", desc: "Share world map data with friends on servers." },
+                { name: "Maplink", desc: "Links map items directly with the Xaero minimap." },
+                { name: "Ping to Map Xaeros", desc: "Integrates player pings directly into Xaero's map." },
+                { name: "Map in Slot", desc: "Renders held maps directly in inventory slots." },
+                { name: "Boatiview", desc: "Aligns player perspective smoothly while riding boats." }
+            ],
+            "Technical & Libraries": [
+                { name: "Fabric API", desc: "Core API hooks required for Fabric mod loader." },
+                { name: "Cloth Config", desc: "Configuration screen interface library." },
+                { name: "Architectury", desc: "Cross-platform API library." },
+                { name: "Yet Another Config Lib", desc: "Modern config interface framework." },
+                { name: "Balm", desc: "Multiplatform modding API library." },
+                { name: "Cristellib", desc: "Library mod for structure generation." },
+                { name: "Jamlib", desc: "Core helper library for mod features." },
+                { name: "Puzzles Lib", desc: "Technical framework library." },
+                { name: "MaLiLib", desc: "Core library for Masa's QoL mods (MiniHUD, Litematica)." },
+                { name: "Iceberg", desc: "Core event and UI library framework." },
+                { name: "CreativeCore", desc: "Technical core framework library." },
+                { name: "Lithostitched", desc: "Worldgen modifier and biome library." },
+                { name: "Fabric Language Kotlin", desc: "Enables mods written in Kotlin." },
+                { name: "Forge Config API Port", desc: "Compatibility port for Forge config files." },
+                { name: "Polymer Bundled", desc: "Server-side modding and asset delivery framework." },
+                { name: "Placeholder API", desc: "Text formatting placeholder engine." },
+                { name: "Ukulib", desc: "Core utility library." },
+                { name: "TCDCommons", desc: "Core technical library for UI elements." },
+                { name: "Cicada Lib", desc: "Modding library for atmospheric mods." },
+                { name: "Midnightlib", desc: "Lightweight configuration library." },
+                { name: "Butterbee", desc: "Cute bee enhancements and performance fixes." },
+                { name: "SuperMartijn642 Config Lib", desc: "Configuration manager library." },
+                { name: "Cirrus", desc: "Cloud rendering utility library." },
+                { name: "PAS", desc: "Player animation sync library." },
+                { name: "Collective", desc: "Utility library for multiple gameplay mods." },
+                { name: "AITK", desc: "AI tweak kit library for entity behavior." },
+                { name: "LibIPN", desc: "Core library for Inventory Profiles Next." },
+                { name: "Prickle", desc: "Plant and block tweak library." },
+                { name: "Lighty", desc: "Light level calculation library." },
+                { name: "ACE", desc: "Advanced core utilities engine." },
+                { name: "Lib", desc: "Fundamental helper utility library." },
+                { name: "Glitchcore", desc: "Technical core helper library." }
+            ]
+        };
+
+        const resourcepacks = [
+            { name: "Fast Better Grass", desc: "Renders grass block sides fast without lag." },
+            { name: "Crops 3D", desc: "Turns flat crop planes into 3D models." },
+            { name: "Animated Items", desc: "Adds subtle motion animations to tools and items." },
+            { name: "Simple 3D Chain", desc: "Adds 3-dimensional links to chain blocks." },
+            { name: "Enhanced Boss Bars", desc: "Redesigns dragon and wither boss health bars." },
+            { name: "Remodeled Doors", desc: "Adds depth and detailed windows to doors." },
+            { name: "Even Better Enchants", desc: "Clean custom item glint visuals." },
+            { name: "Consistent 2D Items", desc: "Fixes pixel alignment on item icons." },
+            { name: "Diagonal Perfect Rails", desc: "Smooth curved diagonal minecart rails." },
+            { name: "Torches Reimagined", desc: "Adds detailed 3D torch handles." },
+            { name: "Better Dark Tooltips", desc: "Dark theme container and item tooltips." },
+            { name: "No Pumpkin Blur", desc: "Removes black view overlay when wearing pumpkins." },
+            { name: "Fresh Flower Pots", desc: "Adds 3D dirt and details inside flower pots." },
+            { name: "Better Leaves", desc: "Fluffy bushy leaf block models." },
+            { name: "Elblanco's 2D Lightsabers", desc: "Changes sword textures into lightsabers." },
+            { name: "Renewed Bookshelf", desc: "Randomized book placement models." },
+            { name: "Emerald to Dollar", desc: "Changes emerald items to dollar bills." },
+            { name: "Very Moist", desc: "Realistic water surface texture polish." },
+            { name: "Minecarts with Wheels", desc: "Adds 3D wheels to all minecarts." },
+            { name: "Fresh Weapons & Tools", desc: "Redesigns default weapon textures." },
+            { name: "Sky's 3D Barrel", desc: "3D wooden rings on barrel blocks." },
+            { name: "Low Shield", desc: "Lowers shield position to clear central view." },
+            { name: "PDB3D's Blocky Armor Stands AV", desc: "Enhanced armor stand wood textures." },
+            { name: "3D Ladders", desc: "3D rungs for wooden ladders." },
+            { name: "Enchant Icons", desc: "Adds custom icons next to enchantment text." },
+            { name: "Beautiful Potions", desc: "Redesigned potion bottle graphics." },
+            { name: "Small Crosshair", desc: "Minimalist precision aiming crosshair." },
+            { name: "Redstone Tweaks", desc: "Displays power levels directly on redstone dust." },
+            { name: "Clearer Slot Highlight", desc: "High visibility yellow slot frame." },
+            { name: "Simple Grass Flowers", desc: "Adds tiny wild flowers to grass tops." },
+            { name: "Smooth Bars", desc: "Modern smooth health and food bars." },
+            { name: "Simple 3D Bars", desc: "3D depth for iron bar blocks." },
+            { name: "Small Low Totem", desc: "Shrinks Totem of Undying visual screen footprint." },
+            { name: "Glowing Trims", desc: "Armor trim patterns glow in darkness." },
+            { name: "Low On Fire", desc: "Reduces burning screen flame height." },
+            { name: "Recolourful Containers Dark", desc: "Dark inventory theme for chests and furnaces." },
+            { name: "Visual Armor Trims", desc: "High contrast armor trim colors." },
+            { name: "3D Sugar Cane", desc: "3D stalk stalks for sugarcane." },
+            { name: "New Glowing Ores", desc: "Outlines raw ore veins with soft luminescence." },
+            { name: "Leggings Fix", desc: "Fixes texture stretching on player armor." },
+            { name: "Visual Paintings", desc: "High resolution replacement art for paintings." },
+            { name: "Theone's Eating Animation Pack", desc: "Dynamic item movement while eating food." },
+            { name: "Glowing Torchflowers", desc: "Torchflowers emit light in darkness." },
+            { name: "All Lowercase", desc: "Forces clean lowercase text font rendering." }
+        ];
+
+        const shaders = [
+            { name: "BSL Shaders v10.1.3", desc: "High performance shaderpack featuring soft shadows, volumetric light rays, ambient occlusion, customizable clouds, and clean water reflections." }
+        ];
+
+        const datapacks = [
+            { name: "Enderman Anti-Grief", desc: "Prevents Endermen mobs from picking up and moving grass, dirt, and stone blocks in your world." }
+        ];
+
+        function createListItem(item, index) {
+            return `
+                <div class="list-item">
+                    <div class="item-number">${index + 1}.</div>
+                    <div class="item-details">
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-desc">${item.desc}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderMods() {
+            const container = document.getElementById('mods-content');
+            const searchVal = (document.getElementById('mods-search')?.value || '').toLowerCase();
+            let html = '';
+            let globalIndex = 0;
+
+            for (const [category, modsList] of Object.entries(categorizedMods)) {
+                const filtered = modsList.filter(m => 
+                    m.name.toLowerCase().includes(searchVal) || 
+                    m.desc.toLowerCase().includes(searchVal)
+                );
+
+                if (filtered.length > 0) {
+                    html += `<div class="category-title">${category}</div>`;
+                    filtered.forEach(mod => {
+                        html += createListItem(mod, globalIndex);
+                        globalIndex++;
+                    });
+                }
+            }
+
+            if (html === '') {
+                html = `<div style="text-align:center; padding: 20px; font-family: var(--mc-font-pixel); font-size: 12px; color: #888;">No mods found.</div>`;
+            }
+
+            container.innerHTML = html;
+        }
+
+        function filterList(type) {
+            if (type === 'mods') {
+                renderMods();
+            } else if (type === 'resourcepacks') {
+                const searchVal = (document.getElementById('resourcepacks-search')?.value || '').toLowerCase();
+                const filtered = resourcepacks.filter(r => 
+                    r.name.toLowerCase().includes(searchVal) || 
+                    r.desc.toLowerCase().includes(searchVal)
+                );
+                renderSimpleList('resourcepacks-content', filtered);
+            }
+        }
+
+        function renderSimpleList(elementId, dataArray) {
+            const container = document.getElementById(elementId);
+            let html = '';
+            dataArray.forEach((item, index) => {
+                html += createListItem(item, index);
+            });
+            if (dataArray.length === 0) {
+                html = `<div style="text-align:center; padding: 20px; font-family: var(--mc-font-pixel); font-size: 12px; color: #888;">No items found.</div>`;
+            }
+            container.innerHTML = html;
+        }
+
+        window.onload = () => {
+            initMinecraftBackground();
+            renderMods();
+            renderSimpleList('resourcepacks-content', resourcepacks);
+            renderSimpleList('shaders-content', shaders);
+            renderSimpleList('datapacks-content', datapacks);
+        };
+    </script>
+</body>
+</html>
