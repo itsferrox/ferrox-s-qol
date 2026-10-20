@@ -1,2 +1,2 @@
 # ferrox-s-qol
-peak minecraft
+Peak Minecraft - Enhanced Performance, Visuals, Terrain & Vanilla+ Features
