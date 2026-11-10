@@ -358,6 +358,8 @@
         }
         summary.category-title { cursor: pointer; }
         summary.category-title:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+    a.item-name { text-decoration: none; }
+        a.item-name:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
     </style>
 </head>
 <body>
@@ -496,8 +498,8 @@
             <button class="mc-button" onclick="downloadMrPack()">Download Modpack</button>
         </div>
 
-        <div class="corner-text left">ferrox's QOL 1.1.2</div>
-        <div class="corner-text right">205 Mods &#183; 45 Resource Packs &#183; 1 Shader &#183; 1 Datapack</div>
+        <div class="corner-text left">ferrox's QOL 1.2.0</div>
+        <div class="corner-text right">224 Mods &#183; 45 Resource Packs &#183; 1 Shader &#183; 1 Datapack</div>
     </div>
 
     <!-- MODS PAGE -->
@@ -505,7 +507,7 @@
         <div class="list-page">
             <div class="list-header">
                 <h2 class="list-title">Mods</h2>
-                <div class="list-count">205 installed</div>
+                <div class="list-count">224 installed</div>
                 <input type="text" id="mods-search" class="mc-search-input" placeholder="Search mods..." oninput="filterList('mods')">
             </div>
             <div class="list-content" id="mods-content"></div>
@@ -557,7 +559,7 @@
             "Is this even vanilla?",
             "Too lazy to chop trees!",
             "Needs more automation!",
-            "205 mods and counting!"
+            "224 mods and counting!"
         ];
         let splashIndex = 0;
 
@@ -587,7 +589,7 @@
         {
             "name": "Sodium Extra",
             "desc": "Additional customization and detailed settings for Sodium.",
-            "path": "mods/sodium-extra-fabric-0.9.4+mc26.2.jar",
+            "path": "mods/sodium-extra-fabric-0.9.5+mc26.2.jar",
             "source": "https://modrinth.com/mod/sodium-extra"
         },
         {
@@ -623,7 +625,7 @@
         {
             "name": "MoreCulling",
             "desc": "Changes how multiple types of block culling are handled.",
-            "path": "mods/moreculling-fabric-26.2-1.8.1.jar",
+            "path": "mods/moreculling-fabric-26.2-1.8.2.jar",
             "source": "https://modrinth.com/mod/moreculling"
         },
         {
@@ -641,7 +643,7 @@
         {
             "name": "C2ME",
             "desc": "Concurrent Chunk Management Engine for faster world generation.",
-            "path": "mods/c2me-fabric-mc26.2-0.4.2-alpha.0.60.jar",
+            "path": "mods/c2me-fabric-mc26.2-0.4.2-alpha.0.66.jar",
             "source": "https://modrinth.com/mod/c2me-fabric"
         },
         {
@@ -665,7 +667,7 @@
         {
             "name": "Chunky",
             "desc": "Pre-generates world chunks to eliminate exploration lag.",
-            "path": "mods/Chunky-Fabric-1.5.3.jar",
+            "path": "mods/Chunky-Fabric-1.5.66.jar",
             "source": "https://modrinth.com/mod/chunky"
         },
         {
@@ -673,6 +675,36 @@
             "desc": "Speeds up resource pack and datapack ZIP loading.",
             "path": "mods/quick-pack-fabric-1.5.1+26.2.jar",
             "source": "https://modrinth.com/mod/quick-pack"
+        },
+        {
+            "name": "Cull Leaves",
+            "desc": "Skips hidden leaf faces for faster rendering.",
+            "path": "mods/cullleaves-fabric-4.1.2+26.2.jar",
+            "source": "https://modrinth.com/mod/cull-leaves"
+        },
+        {
+            "name": "Debugify",
+            "desc": "Fixes bugs reported on the Minecraft bug tracker.",
+            "path": "mods/debugify-26.2.0.1.jar",
+            "source": "https://modrinth.com/mod/debugify"
+        },
+        {
+            "name": "Enhanced Block Entities Reloaded",
+            "desc": "Optimizes block entity rendering and improves visuals.",
+            "path": "mods/enhancedblockentities-0.13.3+26.2-fabric.jar",
+            "source": "https://modrinth.com/mod/ebe-reloaded"
+        },
+        {
+            "name": "FastChest Revived",
+            "desc": "Renders chests as blocks to reduce rendering lag.",
+            "path": "mods/fastchestrevived-fabric-2.0.jar",
+            "source": "https://modrinth.com/mod/fastchest-revived"
+        },
+        {
+            "name": "Ixeris",
+            "desc": "Buffers raw input and processes input events separately.",
+            "path": "mods/Ixeris-4.6.11+26.2-fabric.jar",
+            "source": "https://modrinth.com/mod/ixeris"
         }
     ],
     "Visuals & Graphics": [
@@ -733,7 +765,7 @@
         {
             "name": "Entity Texture Features",
             "desc": "Emulates OptiFine custom entity features and skins.",
-            "path": "mods/entity_texture_features-7.2.6-26.2-fabric.jar",
+            "path": "mods/entity_texture_features-7.2.7-26.2-fabric.jar",
             "source": "https://modrinth.com/mod/entitytexturefeatures"
         },
         {
@@ -757,7 +789,7 @@
         {
             "name": "Not Enough Animations",
             "desc": "Adds third-person eating, drinking, and holding animations.",
-            "path": "mods/notenoughanimations-fabric-1.12.5-mc26.2.jar",
+            "path": "mods/notenoughanimations-fabric-1.12.7-mc26.2.jar",
             "source": "https://modrinth.com/mod/not-enough-animations"
         },
         {
@@ -799,7 +831,7 @@
         {
             "name": "Swinging Lanterns",
             "desc": "Adds realistic swaying animations to lanterns.",
-            "path": "mods/swinginglanterns-fabric-26.2-2.0.4.jar",
+            "path": "mods/swinginglanterns-fabric-26.2-2.1.0.jar",
             "source": "https://modrinth.com/mod/swinging-lanterns"
         },
         {
@@ -812,12 +844,12 @@
             "name": "Panda Colors",
             "desc": "Adds colors and formatting to items, signs and books.",
             "path": "mods/PandaColors-1.2.0+26.2.jar",
-            "source": "https://modrinth.com/mod/panda-colors"
+            "source": "https://modrinth.com/mod/textcolors"
         },
         {
             "name": "Armor HUD",
             "desc": "Displays armor status and durability on screen.",
-            "path": "mods/cleanhud-26.2-2.1.10-mc26.2.jar",
+            "path": "mods/cleanhud-26.2-2.1.11-mc26.2.jar",
             "source": "https://modrinth.com/mod/cleanarmorhud"
         },
         {
@@ -837,6 +869,24 @@
             "desc": "This mod adds an in-game enchantment merge optimizer to the vanilla Anvil GUI.",
             "path": "mods/aeog-26.2-3.1.0.jar",
             "source": "https://modrinth.com/mod/anvil-enchantment-ordering-guide"
+        },
+        {
+            "name": "Better Smoke",
+            "desc": "Overhauls campfire smoke effects.",
+            "path": "mods/bettersmoke-0.1.2+26.2.jar",
+            "source": "https://modrinth.com/mod/better-smoke"
+        },
+        {
+            "name": "Sodium Shadowy Path Blocks (SSPB)",
+            "desc": "Restores smooth shading on path blocks with Sodium.",
+            "path": "mods/sodium-shadowy-path-blocks-fabric-7.0.0.jar",
+            "source": "https://modrinth.com/mod/sodium-shadowy-path-blocks"
+        },
+        {
+            "name": "Soft Imprints",
+            "desc": "Adds dynamic trails on blocks.",
+            "path": "mods/softimprints-fabric-26.2-2.8.0.jar",
+            "source": "https://modrinth.com/mod/snow-imprints"
         }
     ],
     "Quality of Life & UI": [
@@ -1021,12 +1071,6 @@
             "source": "https://modrinth.com/mod/paginatedadvancements"
         },
         {
-            "name": "Better Advancements",
-            "desc": "Full-screen view for tracking achievements.",
-            "path": "mods/BetterAdvancements-Fabric-26.2-0.6.0.72.jar",
-            "source": "https://modrinth.com/mod/better-advancements"
-        },
-        {
             "name": "Better Stats",
             "desc": "Improves the statistics screen with searching, filtering and a redesigned layout.",
             "path": "mods/betterstats-5.5.6+fn-26.2.jar",
@@ -1089,7 +1133,7 @@
         {
             "name": "Cubes Without Borders",
             "desc": "Allows you to play Minecraft in a borderless fullscreen window.",
-            "path": "mods/cwb-4.1.0+26.2.jar",
+            "path": "mods/cwb-5.0.0+26.2.jar",
             "source": "https://modrinth.com/mod/cubes-without-borders"
         },
         {
@@ -1127,6 +1171,72 @@
             "desc": "Shows playtime and world size in the world list.",
             "path": "mods/worldplaytimereborn-1.2.6+26.2-fabric.jar",
             "source": "https://modrinth.com/mod/world-play-time-reborn"
+        },
+        {
+            "name": "Enchantment Level Cap Indicator",
+            "desc": "Marks enchantments that have reached their max level.",
+            "path": "mods/enchantmentlevelcapindicator-26.2.0-1.3.jar",
+            "source": "https://modrinth.com/mod/enchantment-level-cap-indicator"
+        },
+        {
+            "name": "FastQuit",
+            "desc": "Returns to the menu while your world finishes saving.",
+            "path": "mods/fastquit-3.1.5+mc26.2.jar",
+            "source": "https://modrinth.com/mod/fastquit"
+        },
+        {
+            "name": "Keybind Atlas",
+            "desc": "Shows what each key does in a keyboard overlay.",
+            "path": "mods/KeybindAtlas-v2.3.0-mc26.2-fabric.jar",
+            "source": "https://modrinth.com/mod/keybind-atlas"
+        },
+        {
+            "name": "Language Reload",
+            "desc": "Speeds up language switching and adds fallback languages.",
+            "path": "mods/language-reload-1.7.8+26.2.jar",
+            "source": "https://modrinth.com/mod/language-reload"
+        },
+        {
+            "name": "More Chat History",
+            "desc": "Keeps more messages in chat history.",
+            "path": "mods/morechathistory-2.0.0.jar",
+            "source": "https://modrinth.com/mod/morechathistory"
+        },
+        {
+            "name": "NeoToolTipFix",
+            "desc": "Wraps long tooltips to keep them on screen.",
+            "path": "mods/neotooltipfix-1.2.1-26.2.jar",
+            "source": "https://modrinth.com/mod/neotooltipfix"
+        },
+        {
+            "name": "Not Enough Crashes",
+            "desc": "Helps recover from crashes without restarting.",
+            "path": "mods/notenoughcrashes-fabric-4.4.9+26.2.jar",
+            "source": "https://modrinth.com/mod/notenoughcrashes"
+        },
+        {
+            "name": "Reese's Sodium Options",
+            "desc": "Redesigns the Sodium settings menu.",
+            "path": "mods/reeses-sodium-options-fabric-2.2.4+mc26.2.jar",
+            "source": "https://modrinth.com/mod/reeses-sodium-options"
+        },
+        {
+            "name": "Renice Shot",
+            "desc": "Takes high-resolution screenshots.",
+            "path": "mods/renice-shot-1.2.1+mc26.2.jar",
+            "source": "https://modrinth.com/mod/renice-shot"
+        },
+        {
+            "name": "Restore Chat Links",
+            "desc": "Makes links in player chat clickable.",
+            "path": "mods/RestoreChatLinks-0.2.6+26.1.jar",
+            "source": "https://modrinth.com/mod/restore-chat-links"
+        },
+        {
+            "name": "Stop Unloading My Resourcepacks [SUMR]",
+            "desc": "Keeps resource packs enabled after shader errors.",
+            "path": "mods/eg_stop_unloading_my_shaders-1.5.1+26.2-fabric.jar",
+            "source": "https://modrinth.com/mod/stop-unloading-my-resourcepacks"
         }
     ],
     "Gameplay & Mechanics": [
@@ -1247,7 +1357,7 @@
         {
             "name": "Reconnectible Chains",
             "desc": "Connect chains horizontally across posts.",
-            "path": "mods/connectiblechains-2.4.4+26.2-fabric.jar",
+            "path": "mods/connectiblechains-2.5.0+26.2-fabric.jar",
             "source": "https://modrinth.com/mod/reconnectible-chains"
         },
         {
@@ -1301,7 +1411,7 @@
         {
             "name": "Better Block Entities",
             "desc": "Optimizes block entity rendering for higher FPS.",
-            "path": "mods/bbe-fabric-1.3.8-beta.1+mc26.2.jar",
+            "path": "mods/bbe-fabric-1.3.9+mc26.2-mod.jar",
             "source": "https://modrinth.com/mod/better-block-entities"
         },
         {
@@ -1347,12 +1457,6 @@
             "source": "https://modrinth.com/mod/smooth-minecarts"
         },
         {
-            "name": "Minecart Trains Fork",
-            "desc": "Connect multiple minecarts into train lines.",
-            "path": "mods/minecart-trains-fork-2.5.0+26.2.jar",
-            "source": "https://modrinth.com/mod/minecart-trains-fork"
-        },
-        {
             "name": "No Creeper Explosion",
             "desc": "Suppresses creeper explosion terrain damage.",
             "path": "mods/nocreeperexplosion-26.1-26.2-1.0.0+fabric.jar",
@@ -1373,7 +1477,7 @@
         {
             "name": "Underlay",
             "desc": "Place any block (such as carpets) inside anything!",
-            "path": "mods/underlay-1.0.5-fabric-mc26.2.jar",
+            "path": "mods/underlay-1.0.5-hotfix.1-fabric-mc26.2.jar",
             "source": "https://modrinth.com/mod/underlay"
         },
         {
@@ -1481,7 +1585,7 @@
         {
             "name": "Traveler Tool Belt",
             "desc": "Adds an upgradeable belt for quick tool swapping.",
-            "path": "mods/travelertoolbelt-fabric-26.2-1.0.4.jar",
+            "path": "mods/travelertoolbelt-fabric-26.2-1.0.5.jar",
             "source": "https://modrinth.com/mod/traveler-tool-belt"
         },
         {
@@ -1495,6 +1599,12 @@
             "desc": "Edits builds with selections, brushes and copy-paste.",
             "path": "mods/worldedit-mod-7.4.5.jar",
             "source": "https://modrinth.com/mod/worldedit"
+        },
+        {
+            "name": "3D Maps",
+            "desc": "Adds customizable 3D maps inside item frames.",
+            "path": "mods/3d-maps-0.8.2.jar",
+            "source": "https://modrinth.com/mod/3d-maps"
         }
     ],
     "World Generation & Environment": [
@@ -1555,7 +1665,7 @@
         {
             "name": "Streams Reflowing",
             "desc": "Dynamic water currents in natural rivers.",
-            "path": "mods/StreamsReflowing-26.2-fabric-2.15.2.jar",
+            "path": "mods/StreamsReflowing-26.2-fabric-2.17.1.jar",
             "source": "https://modrinth.com/mod/streams-reflowing"
         },
         {
@@ -1581,19 +1691,25 @@
             "desc": "Makes fish swim together in flocks.",
             "path": "mods/boids-2.0.0+26.3.jar",
             "source": "https://modrinth.com/mod/boids"
+        },
+        {
+            "name": "ImmersiveThunder: Reforged",
+            "desc": "Adds distance-based thunder sounds.",
+            "path": "mods/ImmersiveThunder-Reforged-fabric-26.2-1.3.8.jar",
+            "source": "https://modrinth.com/mod/immersivethunder-reforged"
         }
     ],
     "Maps & Navigation": [
         {
             "name": "Xaero's World Map",
             "desc": "Full-screen interactive world map interface.",
-            "path": "mods/xaeroworldmap-fabric-26.2-1.47.1.jar",
+            "path": "mods/xaeroworldmap-fabric-26.2-1.47.2.jar",
             "source": "https://modrinth.com/mod/xaeros-world-map"
         },
         {
             "name": "Xaero's Minimap",
             "desc": "On-screen mini-map with entity radar and waypoints.",
-            "path": "mods/xaerominimap-fabric-26.2-26.6.1.jar",
+            "path": "mods/xaerominimap-fabric-26.2-26.6.2.jar",
             "source": "https://modrinth.com/mod/xaeros-minimap"
         },
         {
@@ -1769,13 +1885,13 @@
         {
             "name": "Cirrus",
             "desc": "Cloud & skybox overhaul mod.",
-            "path": "mods/cirrus-fabric-26.2-1.4.1.jar",
+            "path": "mods/cirrus-fabric-26.2-1.4.2.jar",
             "source": "https://modrinth.com/mod/cirrus"
         },
         {
             "name": "Collective",
             "desc": "Utility library for multiple gameplay mods.",
-            "path": "mods/collective-26.2.0-8.64.jar",
+            "path": "mods/collective-26.2.0-8.67.jar",
             "source": "https://modrinth.com/mod/collective"
         },
         {
@@ -1803,12 +1919,6 @@
             "source": "https://modrinth.com/mod/lighty"
         },
         {
-            "name": "Audaki Cart Engine (Faster Minecarts)",
-            "desc": "Adds configurable faster minecarts on vanilla tracks.",
-            "path": "mods/ACE_mc26.2-5.0.1.jar",
-            "source": "https://modrinth.com/mod/audaki-cart-engine"
-        },
-        {
             "name": "5555ff-lib",
             "desc": "Library used in Jodek's projects",
             "path": "mods/lib-5555ff-v1.1.5.jar",
@@ -1819,6 +1929,12 @@
             "desc": "Technical core helper library.",
             "path": "mods/GlitchCore-fabric-26.2-26.2.0.0.0.jar",
             "source": "https://modrinth.com/mod/glitchcore"
+        },
+        {
+            "name": "MatLib",
+            "desc": "Shared library required by supporting mods.",
+            "path": "mods/matlib-1.0.0+26.2-fabric.jar",
+            "source": "https://modrinth.com/mod/matlib"
         }
     ]
 };
@@ -1881,7 +1997,7 @@
     {
         "name": "Torches Reimagined",
         "desc": "Adds detailed 3D torch handles.",
-        "path": "resourcepacks/§eTorches§8-§eReimagined§0_§8[v1.9]§0.zip",
+        "path": "resourcepacks/§eTorches§8-§eReimagined§0_§8[v1.10]§0.zip",
         "source": "https://modrinth.com/resourcepack/torches-reimagined"
     },
     {
@@ -2119,7 +2235,7 @@
                 <div class="list-item">
                     <div class="item-number">${index + 1}.</div>
                     <div class="item-details">
-                        <div class="item-name">${escapeHtml(item.name)}</div>
+                        <a class="item-name" href="${escapeHtml(item.source)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.name)}</a>
                         <div class="item-desc">${escapeHtml(item.desc)}</div>
                     </div>
                 </div>
